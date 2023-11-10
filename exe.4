@@ -1,0 +1,78 @@
+using System;
+
+class TRTriangle
+{
+    protected double sideLength;
+
+    public TRTriangle() { }
+
+    public TRTriangle(double length) => sideLength = length;
+
+    public TRTriangle(TRTriangle other) => sideLength = other.sideLength;
+
+    public void Input() => sideLength = Convert.ToDouble(Console.ReadLine());
+
+    public void Display() => Console.WriteLine($"Equilateral Triangle with side length: {sideLength}");
+
+    public double GetArea() => (Math.Sqrt(3) / 4) * Math.Pow(sideLength, 2);
+
+    public double GetPerimeter() => 3 * sideLength;
+
+    public bool Compare(TRTriangle other) => sideLength == other.sideLength;
+
+    public static TRTriangle operator +(TRTriangle t1, TRTriangle t2) => new TRTriangle(t1.sideLength + t2.sideLength);
+
+    public static TRTriangle operator -(TRTriangle t1, TRTriangle t2) => new TRTriangle(Math.Abs(t1.sideLength - t2.sideLength));
+
+    public static TRTriangle operator *(TRTriangle t, double factor) => new TRTriangle(t.sideLength * factor);
+}
+
+class TPiramid : TRTriangle
+{
+    public TPiramid() { }
+
+    public TPiramid(double length) : base(length) { }
+
+    public TPiramid(TPiramid other) : base(other) { }
+
+    public double GetVolume() => (Math.Sqrt(2) / 12) * Math.Pow(base.GetArea(), 3 / 2);
+
+
+    class Program
+    {
+        static void Main()
+        {
+            TRTriangle triangle1 = new TRTriangle(5.0);
+            TRTriangle triangle2 = new TRTriangle();
+            triangle2.Input();
+
+            Console.WriteLine("Triangle 1:");
+            triangle1.Display();
+            Console.WriteLine($"Area: {triangle1.GetArea()}, Perimeter: {triangle1.GetPerimeter()}");
+
+            Console.WriteLine("\nTriangle 2:");
+            triangle2.Display();
+            Console.WriteLine($"Area: {triangle2.GetArea()}, Perimeter: {triangle2.GetPerimeter()}");
+
+            Console.WriteLine(triangle1.Compare(triangle2) ? "\nTriangle 1 is equal to Triangle 2." : "\nTriangle 1 is not equal to Triangle 2.");
+
+            TRTriangle triangleSum = triangle1 + triangle2;
+            Console.WriteLine("\nTriangle Sum:");
+            triangleSum.Display();
+
+            TRTriangle triangleDiff = triangle1 - triangle2;
+            Console.WriteLine("\nTriangle Difference:");
+            triangleDiff.Display();
+
+            TRTriangle triangleScaled = triangle1 * 2.0;
+            Console.WriteLine("\nTriangle Scaled:");
+            triangleScaled.Display();
+
+            TPiramid pyramid = new TPiramid(5.0);
+
+            Console.WriteLine("\nPyramid:");
+            pyramid.Display();
+            Console.WriteLine($"Volume: {pyramid.GetVolume()}, Area: {pyramid.GetArea()}, Perimeter: {pyramid.GetPerimeter()}");
+        }
+    }
+}
