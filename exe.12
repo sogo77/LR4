@@ -1,0 +1,140 @@
+using System;
+using System.Linq;
+
+class TSMatrix
+{
+    protected int[,] matrix;
+    public int Size { get; private set; }
+
+    public TSMatrix() { }
+
+    public TSMatrix(int[,] data, int size)
+    {
+        matrix = data;
+        Size = size;
+    }
+
+    public TSMatrix(TSMatrix other)
+    {
+        matrix = (int[,])other.matrix.Clone();
+        Size = other.Size;
+    }
+
+    public void Input()
+    {
+        Console.WriteLine($"Enter {Size}x{Size} matrix elements:");
+        matrix = new int[Size, Size];
+        for (int i = 0; i < Size; i++)
+            for (int j = 0; j < Size; j++)
+                matrix[i, j] = Convert.ToInt32(Console.ReadLine());
+    }
+
+    public void Display()
+    {
+        Console.WriteLine($"Matrix {Size}x{Size}:");
+        for (int i = 0; i < Size; i++, Console.WriteLine())
+            for (int j = 0; j < Size; j++)
+                Console.Write(matrix[i, j] + " ");
+    }
+
+    public int FindMaxElement()
+    {
+        int maxElement = int.MinValue;
+        for (int i = 0; i < Size; i++)
+            for (int j = 0; j < Size; j++)
+                if (matrix[i, j] > maxElement)
+                    maxElement = matrix[i, j];
+
+        return maxElement;
+    }
+
+    public int FindMinElement()
+    {
+        int minElement = int.MaxValue;
+        for (int i = 0; i < Size; i++)
+            for (int j = 0; j < Size; j++)
+                if (matrix[i, j] < minElement)
+                    minElement = matrix[i, j];
+
+        return minElement;
+    }
+
+    public int SumElements() => matrix.Cast<int>().Sum();
+
+    private static TSMatrix OperateMatrices(TSMatrix a, TSMatrix b, Func<int, int, int> operation)
+    {
+        if (a.Size != b.Size)
+            throw new ArgumentException("Matrix dimensions do not match.");
+
+        int[,] result = new int[a.Size, a.Size];
+        for (int i = 0; i < a.Size; i++)
+            for (int j = 0; j < a.Size; j++)
+                result[i, j] = operation(a.matrix[i, j], b.matrix[i, j]);
+
+        return new TSMatrix(result, a.Size);
+    }
+
+    public static TSMatrix operator +(TSMatrix a, TSMatrix b) => OperateMatrices(a, b, (x, y) => x + y);
+
+    public static TSMatrix operator -(TSMatrix a, TSMatrix b) => OperateMatrices(a, b, (x, y) => x - y);
+}
+
+class TDeterminant2 : TSMatrix
+{
+    public TDeterminant2(TSMatrix source) : base(source)
+    {
+        if (Size != 2)
+        {
+            throw new InvalidOperationException("Determinant calculation is supported only for 2x2 matrices.");
+        }
+    }
+
+    public int CalculateDeterminant() => matrix[0, 0] * matrix[1, 1] - matrix[0, 1] * matrix[1, 0];
+}
+
+class Program
+{
+    static void Main()
+    {
+        TSMatrix matrix1 = new TSMatrix();
+        matrix1.Input();
+
+        Console.WriteLine("Matrix 1:");
+        matrix1.Display();
+
+        Console.WriteLine($"Max Element: {matrix1.FindMaxElement()}");
+        Console.WriteLine($"Min Element: {matrix1.FindMinElement()}");
+        Console.WriteLine($"Sum of Elements: {matrix1.SumElements()}");
+
+        TSMatrix matrix2 = new TSMatrix();
+        matrix2.Input();
+
+        Console.WriteLine("Matrix 2:");
+        matrix2.Display();
+
+        try
+        {
+            TSMatrix sumMatrix = matrix1 + matrix2;
+            Console.WriteLine("\nMatrix Sum:");
+            sumMatrix.Display();
+
+            TSMatrix diffMatrix = matrix1 - matrix2;
+            Console.WriteLine("\nMatrix Difference:");
+            diffMatrix.Display();
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+
+        try
+        {
+            TDeterminant2 determinant2 = new TDeterminant2(matrix1);
+            Console.WriteLine($"\nDeterminant of 2x2 Matrix 1: {determinant2.CalculateDeterminant()}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}
