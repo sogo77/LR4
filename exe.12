@@ -22,7 +22,7 @@ class TSMatrix
 
     public void Input()
     {
-        Console.WriteLine($"Enter {Size}x{Size} matrix elements:");
+        Console.WriteLine($" Введіть {Size}x{Size} елементи матриці:");
         matrix = new int[Size, Size];
         for (int i = 0; i < Size; i++)
             for (int j = 0; j < Size; j++)
@@ -31,7 +31,7 @@ class TSMatrix
 
     public void Display()
     {
-        Console.WriteLine($"Matrix {Size}x{Size}:");
+        Console.WriteLine($" Матриця {Size}x{Size}:");
         for (int i = 0; i < Size; i++, Console.WriteLine())
             for (int j = 0; j < Size; j++)
                 Console.Write(matrix[i, j] + " ");
@@ -64,7 +64,7 @@ class TSMatrix
     private static TSMatrix OperateMatrices(TSMatrix a, TSMatrix b, Func<int, int, int> operation)
     {
         if (a.Size != b.Size)
-            throw new ArgumentException("Matrix dimensions do not match.");
+            throw new ArgumentException(" Розміри матриці не збігаються.");
 
         int[,] result = new int[a.Size, a.Size];
         for (int i = 0; i < a.Size; i++)
@@ -85,7 +85,7 @@ class TDeterminant2 : TSMatrix
     {
         if (Size != 2)
         {
-            throw new InvalidOperationException("Determinant calculation is supported only for 2x2 matrices.");
+            throw new InvalidOperationException(" Обчислення детермінанта підтримується лише для матриць 2x2.");
         }
     }
 
@@ -99,42 +99,42 @@ class Program
         TSMatrix matrix1 = new TSMatrix();
         matrix1.Input();
 
-        Console.WriteLine("Matrix 1:");
+        Console.WriteLine(" Матриця 1:");
         matrix1.Display();
 
-        Console.WriteLine($"Max Element: {matrix1.FindMaxElement()}");
-        Console.WriteLine($"Min Element: {matrix1.FindMinElement()}");
-        Console.WriteLine($"Sum of Elements: {matrix1.SumElements()}");
+        Console.WriteLine($" Максимальний елемент: {matrix1.FindMaxElement()}");
+        Console.WriteLine($" Мінімальний елемент: {matrix1.FindMinElement()}");
+        Console.WriteLine($" Сума елементів: {matrix1.SumElements()}");
 
         TSMatrix matrix2 = new TSMatrix();
         matrix2.Input();
 
-        Console.WriteLine("Matrix 2:");
+        Console.WriteLine(" Матриця 2:");
         matrix2.Display();
 
         try
         {
             TSMatrix sumMatrix = matrix1 + matrix2;
-            Console.WriteLine("\nMatrix Sum:");
+            Console.WriteLine("\n Сума матриці:");
             sumMatrix.Display();
 
             TSMatrix diffMatrix = matrix1 - matrix2;
-            Console.WriteLine("\nMatrix Difference:");
+            Console.WriteLine("\n Матрична різниця:");
             diffMatrix.Display();
         }
         catch (ArgumentException ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            Console.WriteLine($" Помилка: {ex.Message}");
         }
 
         try
         {
             TDeterminant2 determinant2 = new TDeterminant2(matrix1);
-            Console.WriteLine($"\nDeterminant of 2x2 Matrix 1: {determinant2.CalculateDeterminant()}");
+            Console.WriteLine($"\n Визначник 2x2 матриці 1: {determinant2.CalculateDeterminant()}");
         }
         catch (InvalidOperationException ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            Console.WriteLine($"Помилка: {ex.Message}");
         }
     }
 }
